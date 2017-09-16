@@ -6,7 +6,7 @@
 /*   By: elopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/18 23:26:33 by elopez            #+#    #+#             */
-/*   Updated: 2017/08/30 22:30:00 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/15 21:39:28 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <wchar.h>
+# include <stdint.h>
 
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
 long long		ft_pow(long long x, long long y);
