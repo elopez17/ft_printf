@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 12:48:16 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/14 18:33:23 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/20 12:39:09 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,41 +33,43 @@ t_convspec g_convspec[] =
 	{'F', &pf_spec_f}
 };
 
-static int	pf_invalid_spec(t_flags *flag, char c)
+static int	pf_invalid_spec(t_flags *flag, t_outp *op, char c)
 {
-	int print;
+	int len;
 
 	if (flag->width > 1)
 	{
-		print = flag->width - 1;
+		len = flag->width - 1;
 		if (flag->zero)
-			while (print--)
-				write(1, "0", 1);
+			op->str = ft_strmer(op->str, MAKES('0', len));
 		else if (!flag->left_adj)
-			while (print--)
-				write(1, " ", 1);
-		c ? write(1, &c, 1) : 0;
+			op->str = ft_strmer(op->str, MAKES(' ', len));
+		op->str = ft_strmer(op->str, ft_strsub(&c, 0, (!c ? 0 : 1)));
 		if (flag->left_adj)
-			while (print--)
-				write(1, " ", 1);
-		return (flag->width);
+			op->str = ft_strmer(op->str, MAKES(' ', len));
+		return (0);
 	}
 	if (!c)
 		return (-2);
-	return (write(1, &c, 1));
+	op->str = ft_strmer(op->str, ft_strsub(&c, 0, 1));
+	return (0);
 }
 
-int			pf_conv_specifier(const char **fmt, t_flags *flag, va_list ap)
+int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list ap)
 {
 	int i;
 
 	i = -1;
+	op->wlen = 0;
 	flag->l = (**fmt == 'D' || **fmt == 'U' || **fmt == 'O') ? 1 : flag->l;
 	flag->alter = (**fmt == 'p') ? 1 : flag->alter;
 	while (++i < TOTAL_SPECS)
 	{
 		if (**fmt == g_convspec[i].c)
-			return (g_convspec[i].f(flag, ap));
+		{
+			g_convspec[i].f(flag, op, ap);
+			return (0);
+		}
 	}
-	return (pf_invalid_spec(flag, **fmt));
+	return (pf_invalid_spec(flag, op, **fmt));
 }

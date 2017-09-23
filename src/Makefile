@@ -6,7 +6,7 @@
 #    By: elopez <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/18 23:40:47 by elopez            #+#    #+#              #
-#    Updated: 2017/09/14 22:08:12 by eLopez           ###   ########.fr        #
+#    Updated: 2017/09/21 18:55:03 by eLopez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NO_COLOR= \x1b[0m
@@ -28,7 +28,7 @@ TURQ	= \x1b[36m
 WHT		= \x1b[37m
 
 NAME		= libftprintf.a
-CC			= gcc
+CC			= clang
 CFLAGS		= -Wall -Wextra -Werror -g
 FILES		= $(shell ls | grep -E ".+\.c")
 ODIR		:= obj

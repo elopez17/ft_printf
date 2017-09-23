@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 00:04:22 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/08 21:46:50 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/20 20:00:06 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static inline int	wintlen(wint_t wi)
 {
-	if (wi <= (MB_CUR_MAX == 1 ? 0xff : 0x7f))
+	if (wi < (MB_CUR_MAX == 1 ? 0xff : 0x7f))
 		return (1);
 	else if (wi <= 0x7ff)
 		return (2);
@@ -24,32 +24,31 @@ static inline int	wintlen(wint_t wi)
 		return (4);
 }
 
-static inline int	print_width(wint_t cval, t_flags *flag, int len)
+static void			print_width(wint_t cval, t_flags *flag, t_outp *op, int len)
 {
-	int printed;
+	char	*tmp;
 
-	printed = 0;
 	if (flag->zero)
-		while (len--)
-			printed += write(1, "0", 1);
+		op->wlen += write(1, (tmp = MAKES('0', len)), len);
 	else if (!flag->left_adj)
-		while (len--)
-			printed += write(1, " ", 1);
-	printed += ft_putwint(cval);
+		op->wlen += write(1, (tmp = MAKES(' ', len)), len);
+	op->wlen += ft_putwint(cval);
 	if (flag->left_adj)
-		while (len--)
-			printed += write(1, " ", 1);
-	return (printed);
+		op->wlen += write(1, (tmp = MAKES(' ', len)), len);
+	ft_strdel(&tmp);
 }
 
-int					pf_wint_t(t_flags *flag, va_list ap)
+void				pf_wint_t(t_flags *flag, t_outp *op, va_list ap)
 {
 	wint_t c;
 
+	op->wlen += write(1, op->str, ft_strlen(op->str));
+	ft_strdel(&(op->str));
 	c = va_arg(ap, wint_t);
 	if (flag->width > wintlen(c))
 	{
-		return (print_width(c, flag, flag->width - wintlen(c)));
+		print_width(c, flag, op, flag->width - wintlen(c));
+		return ;
 	}
-	return (ft_putwint(c));
+	op->wlen += ft_putwint(c);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_float.c                                         :+:      :+:    :+:   */
+/*   pf_spec_f.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:12:30 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/14 18:53:16 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/21 18:09:07 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,22 @@ static void	set_decimal(t_flags *flag, char **result)
 		*(*result + ft_strlen(*result) - 1) = '\0';
 }
 
-static int	print_width(t_flags *flag, char **result)
+static void	print_width(t_flags *flag, t_outp *op, char **result)
 {
-	int len;
-
-	len = 0;
+	flag->width -= ft_strlen(*result);
 	if (flag->left_adj == 0)
-		while (flag->width > (int)ft_strlen(*result))
-		{
-			if (flag->zero)
-				*result = ft_strmerge(ft_strdup("0"), *result);
-			else
-				*result = ft_strmerge(ft_strdup(" "), *result);
-		}
+	{
+		if (flag->zero)
+			*result = ft_strmerge(MAKES('0', flag->width), *result);
+		else
+			*result = ft_strmerge(MAKES(' ', flag->width), *result);
+	}
 	else
-		while (flag->width > (int)ft_strlen(*result))
-			*result = ft_strmerge(*result, ft_strdup(" "));
-	len += write(1, *result, ft_strlen(*result));
-	return (len);
+		*result = ft_strmerge(*result, MAKES(' ', flag->width));
+	op->str = ft_strmer(op->str, *result);
 }
 
-int			pf_spec_f(t_flags *flag, va_list ap)
+void		pf_spec_f(t_flags *flag, t_outp *op, va_list ap)
 {
 	double	val;
 	double	dec_part;
@@ -70,7 +65,7 @@ int			pf_spec_f(t_flags *flag, va_list ap)
 	dec_part = (val - (long long)val) * 1000000.0;
 	dec_part *= (dec_part < 0.0) ? -1 : 1;
 	result = ft_strmerge(int_part, ft_strdup("."));
-	if (ft_strlen(dec_s = ft_lltoa((long long)dec_part)) < 6)
+	if (ft_strlen(dec_s = ft_lltoa((long long)(dec_part + 0.5))) < 6)
 		while (ft_strlen(dec_s) != 6)
 			dec_s = ft_strmerge(ft_strdup("0"), dec_s);
 	result = ft_strmerge(result, dec_s);
@@ -78,9 +73,7 @@ int			pf_spec_f(t_flags *flag, va_list ap)
 		add_prefix(flag, &result);
 	set_decimal(flag, &result);
 	if (flag->width > (int)ft_strlen(result))
-		val = print_width(flag, &result);
+		print_width(flag, op, &result);
 	else
-		val = write(1, result, ft_strlen(result));
-	ft_strdel(&result);
-	return ((int)val);
+		op->str = ft_strmer(op->str, result);
 }

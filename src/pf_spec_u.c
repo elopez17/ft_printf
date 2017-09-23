@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:33:29 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/13 20:50:20 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/21 15:59:56 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static uintmax_t	len_arg(t_flags *flag, va_list ap)
 	return (va_arg(ap, unsigned int));
 }
 
-static void		print_width(t_flags *flag, char *s, int *ret)
+static void		print_width(t_flags *flag, t_outp *op, char **s, int *ret)
 {
 	char	*new_s;
 	int		i;
@@ -44,28 +44,18 @@ static void		print_width(t_flags *flag, char *s, int *ret)
 		new_s[i++] = '0';
 		++(*ret);
 	}
-	while (s[j] != '\0')
-		new_s[i++] = s[j++];
+	while ((*s)[j] != '\0')
+		new_s[i++] = (*s)[j++];
 	if (flag->left_adj)
-		write(1, new_s, i);
-	while (*ret < flag->width && (*ret)++)
-		write(1, " ", 1);
+		op->str = ft_strmer(op->str, new_s);
+	if (*ret < flag->width)
+		op->str = ft_strmer(op->str, MAKES(' ', flag->width - *ret));
 	if (!flag->left_adj)
-		write(1, new_s, i);
-	ft_strdel(&new_s);
+		op->str = ft_strmer(op->str, new_s);
+	ft_strdel(s);
 }
 
-static void		print_prec(t_flags *flag, char *s, int *ret)
-{
-	while ((*ret) < flag->prec_num)
-	{
-		++(*ret);
-		write(1, "0", 1);
-	}
-	ft_putstr(s);
-}
-
-int				pf_spec_u(t_flags *flag, va_list ap)
+void			pf_spec_u(t_flags *flag, t_outp *op, va_list ap)
 {
 	uintmax_t	val;
 	char		*s;
@@ -76,12 +66,13 @@ int				pf_spec_u(t_flags *flag, va_list ap)
 	s = (!val && !HASLENGTH(flag) && (flag->prec && !flag->prec_num) && !HASFLAG(flag)) ?\
 		ft_strdup("") : ft_uimttoa(val);
 	ret = ft_strlen(s);
-	if (flag->width > ret)
-		print_width(flag, s, &ret);
+	if (flag->width > ret && (flag->width > flag->prec_num || !flag->prec))
+		print_width(flag, op, &s, &ret);
 	else if (flag->prec && flag->prec_num > ret)
-		print_prec(flag, s, &ret);
+	{
+		op->str = ft_strmer(op->str, MAKES('0', flag->prec_num - ret));
+		op->str = ft_strmer(op->str, s);
+	}
 	else
-		write(1, s, ret);
-	ft_strdel(&s);
-	return (ret);
+		op->str = ft_strmer(op->str, s);
 }

@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/12 15:41:37 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/21 16:17:29 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,44 +37,44 @@ static char	*itox(uintmax_t dec)
 	return (s);
 }
 
-static void	print_prec(t_flags *flag, char *s, int *ret)
+static void	print_prec(t_flags *flag, t_outp *op, char **s, int *len)
 {
-	flag->prec_num -= (*ret - 2);
-	write(1, s, 2);
-	while (flag->prec_num--)
-		*ret += write(1, "0", 1);
-	ft_putstr(s + 2);
+	flag->prec_num -= (*len - 2);
+	op->str = ft_strmer(op->str, ft_strsub(*s, 0, 2));
+	op->str = ft_strmer(op->str, MAKES('0', flag->prec_num));
+	op->str = ft_strmer(op->str, ft_strsub(*s, 2, *len - 2));
+	ft_strdel(s);
 }
 
-static void	print_width(t_flags *flag, char *s, int *ret)
+static void	print_width(t_flags *flag, t_outp *op, char **s, int *len)
 {
-	flag->prec_num -= *ret - 2;
-	flag->width = (flag->width - *ret) - (PREC_VAL(flag));
-	*ret += flag->width + (PREC_VAL(flag));
+	flag->prec_num -= *len - 2;
+	flag->width = (flag->width - *len) - (PREC_VAL(flag));
 	if (flag->left_adj)
 	{
-		write(1, s, 2);
-		if (flag->prec)
-			while (flag->prec_num-- > 0)
-				write(1, "0", 1);
-		ft_putstr(s + 2);
-		while (flag->width--)
-			write(1, " ", 1);
+		op->str = ft_strmer(op->str, ft_strsub(*s, 0, 2));
+		if (flag->prec && flag->prec_num > 0)
+			op->str = ft_strmer(op->str, MAKES('0', flag->prec_num));
+		op->str = ft_strmer(op->str, ft_strsub(*s, 2, *len - 2));
+		op->str = ft_strmer(op->str, MAKES(' ', flag->width));
 		return ;
 	}
-	if (flag->zero && write(1, s, 2))
-		while (flag->width--)
-			write(1, "0", 1);
+	if (flag->zero)
+	{
+		op->str = ft_strmer(op->str, ft_strsub(*s, 0, 2));
+		op->str = ft_strmer(op->str, MAKES('0', flag->width));
+	}
 	else
-		while (flag->width-- > 0)
-			write(1, " ", 1);
-	(!flag->zero) ? write(1, s, 2) : 0;
-	while (flag->prec_num-- > 0)
-		write(1, "0", 1);
-	ft_putstr(s + 2);
+		op->str = ft_strmer(op->str, MAKES(' ', flag->width));
+	if (!flag->zero)
+		op->str = ft_strmer(op->str, ft_strsub(*s, 0, 2));
+	if (flag->prec && flag->prec_num > 0)
+		op->str = ft_strmer(op->str, MAKES('0', flag->prec_num));
+	op->str = ft_strmer(op->str, ft_strsub(*s, 2, *len - 2));
+	ft_strdel(s);
 }
 
-int			pf_spec_p(t_flags *flag, va_list ap)
+void		pf_spec_p(t_flags *flag, t_outp *op, va_list ap)
 {
 	uintmax_t	dec;
 	int			len;
@@ -86,11 +86,9 @@ int			pf_spec_p(t_flags *flag, va_list ap)
 		s = ft_strmerge(ft_strdup("0x"), itox(dec));
 	len = ft_strlen(s);
 	if (flag->width > len && (!flag->prec || flag->width > flag->prec_num))
-		print_width(flag, s, &len);
+		print_width(flag, op, &s, &len);
 	else if (flag->prec && flag->prec_num > len - 2)
-		print_prec(flag, s, &len);
+		print_prec(flag, op, &s, &len);
 	else
-		ft_putstr(s);
-	ft_strdel(&s);
-	return (len);
+		op->str = ft_strmer(op->str, s);
 }

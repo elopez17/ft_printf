@@ -6,7 +6,7 @@
 /*   By: elopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/18 23:20:59 by elopez            #+#    #+#             */
-/*   Updated: 2017/07/20 19:38:17 by elopez           ###   ########.fr       */
+/*   Updated: 2017/09/20 16:41:14 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ size_t	ft_wcharlen(const wchar_t *s)
 	bytes = 0;
 	while (s[i])
 	{
-		if (s[i] <= ((MB_CUR_MAX == 1) ? 0xFF : 0x7F))
+		if (s[i] < ((MB_CUR_MAX == 1) ? 0xFF : 0x7F))
 			++bytes;
 		else if (s[i] <= 0x7ff)
 			bytes += 2;

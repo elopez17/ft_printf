@@ -6,30 +6,27 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:33:29 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/14 20:35:33 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/20 20:16:28 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	print_width(t_flags *flag, char *s, int slen)
+static void	print_width(t_flags *flag, t_outp *op, char *s, int slen)
 {
-	int print;
+	int len;
 
-	print = flag->width - slen;
+	len = flag->width - slen;
 	if (flag->zero)
-		while (print--)
-			write(1, "0", 1);
+		op->str = ft_strmer(op->str, MAKES('0', len));
 	else if (!flag->left_adj)
-		while (print--)
-			write(1, " ", 1);
-	write(1, s, slen);
+		op->str = ft_strmer(op->str, MAKES(' ', len));
+	op->str = ft_strmer(op->str, ft_strsub(s, 0, slen));
 	if (flag->left_adj)
-		while (print--)
-			write(1, " ", 1);
+		op->str = ft_strmer(op->str, MAKES(' ', len));
 }
 
-int			pf_str(t_flags *flag, va_list ap)
+void		pf_str(t_flags *flag, t_outp *op, va_list ap)
 {
 	char	*s;
 	int		len;
@@ -37,7 +34,10 @@ int			pf_str(t_flags *flag, va_list ap)
 	if (flag->prec_num < 0)
 		flag->prec = 0;
 	if (flag->l)
-		return (pf_wchar_t(flag, ap));
+	{
+		pf_wchar_t(flag, op, ap);
+		return ;
+	}
 	if (!(s = va_arg(ap, char*)))
 		s = ft_strdup("(null)");
 	else
@@ -47,11 +47,10 @@ int			pf_str(t_flags *flag, va_list ap)
 		len = flag->prec_num;
 	if (flag->width > len)
 	{
-		print_width(flag, s, len);
+		print_width(flag, op, s, len);
 		ft_strdel(&s);
-		return (flag->width);
+		return ;
 	}
-	write(1, s, len);
+	op->str = ft_strmer(op->str, ft_strsub(s, 0, len));
 	ft_strdel(&s);
-	return (len);
 }

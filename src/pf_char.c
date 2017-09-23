@@ -6,34 +6,56 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:06:26 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/08 21:20:25 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/21 12:26:56 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int			pf_char(t_flags *flag, va_list ap)
+static inline void	null_input(t_flags *flag, t_outp *op, char c)
 {
-	unsigned char	c;
-	int				print;
+	char *tmp;
+
+	op->wlen += write(1, op->str, ft_strlen(op->str));
+	ft_strdel(&(op->str));
+	if (flag->width-- > 1)
+	{
+		if (flag->zero)
+			op->wlen += write(1, (tmp = MAKES('0', flag->width)), flag->width);
+		else if (!flag->left_adj)
+			op->wlen += write(1, (tmp = MAKES(' ', flag->width)), flag->width);
+		op->wlen += write(1, &c, 1);
+		if (flag->left_adj)
+			op->wlen += write(1, (tmp = MAKES(' ', flag->width)), flag->width);
+		return ;
+	}
+	op->wlen += write(1, &c, 1);
+}
+
+void		pf_char(t_flags *flag, t_outp *op, va_list ap)
+{
+	char	c;
 
 	if (flag->l)
-		return (pf_wint_t(flag, ap));
-	c = va_arg(ap, int);
-	if (flag->width > 1)
 	{
-		print = flag->width - 1;
-		if (flag->zero)
-			while (print--)
-				write(1, "0", 1);
-		else if (!flag->left_adj)
-			while (print--)
-				write(1, " ", 1);
-		write(1, &c, 1);
-		if (flag->left_adj)
-			while (print--)
-				write(1, " ", 1);
-		return (flag->width);
+		pf_wint_t(flag, op, ap);
+		return ;
 	}
-	return (write(1, &(c), 1));
+	if (!(c = va_arg(ap, int)))
+	{
+		null_input(flag, op, c);
+		return ;
+	}
+	if (flag->width-- > 1)
+	{
+		if (flag->zero)
+			op->str = ft_strmer(op->str, MAKES('0', flag->width));
+		else if (!flag->left_adj)
+			op->str = ft_strmer(op->str, MAKES(' ', flag->width));
+		op->str = ft_strmer(op->str, MAKES(c, 1));
+		if (flag->left_adj)
+			op->str = ft_strmer(op->str, MAKES(' ', flag->width));
+		return ;
+	}
+	op->str = ft_strmer(op->str, MAKES(c, 1));
 }

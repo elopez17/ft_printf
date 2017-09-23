@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/14 18:13:02 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/21 20:09:46 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,38 +79,35 @@ static char			*add_zeros(t_flags *flag, int *len)
 	return (str);
 }
 
-static void			print_width(t_flags *flag, char *s, int *ret)
+static void			print_width(t_flags *flag, t_outp *op, char *s, int *ret)
 {
 	flag->width -= *ret;
-	*ret += flag->width;
 	if (flag->left_adj)
 	{
-		ft_putstr(s);
-		while (flag->width--)
-			write(1, " ", 1);
+		op->str = ft_strmer(op->str, s);
+		if (flag->width > 0)
+			op->str = ft_strmer(op->str, MAKES(' ', flag->width));
 		return ;
 	}
-	while (flag->width-- > 0)
-		write(1, " ", 1);
-	ft_putstr(s);
+	if (flag->width > 0)
+		op->str = ft_strmer(op->str, MAKES(' ', flag->width));
+	op->str = ft_strmer(op->str, s);
 }
 
-int					pf_spec_o(t_flags *flag, va_list ap)
+void				pf_spec_o(t_flags *flag, t_outp *op, va_list ap)
 {
 	uintmax_t	dec;
 	int			len;
 	char		*s;
 
-	if (!(dec = len_arg(flag, ap)))
-		s = ft_strdup(((flag->prec && !flag->prec_num) || flag->alter ? "" : "0"));
-	else
+	if ((dec = len_arg(flag, ap)))
 		s = itoo(dec);
+	else
+		s = ft_strdup(((flag->prec && !flag->prec_num) || flag->alter ? "" : "0"));
 	if ((len = ft_strlen(s)) || flag->alter)
 		s = ft_strmer(add_zeros(flag, &len), s);
 	if (flag->width > len)
-		print_width(flag, s, &len);
+		print_width(flag, op, s, &len);
 	else
-		ft_putstr(s);
-	ft_strdel(&s);
-	return (len);
+		op->str = ft_strmer(op->str, s);
 }

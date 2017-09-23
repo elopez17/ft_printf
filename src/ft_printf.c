@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/20 16:40:34 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/07 14:00:52 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/21 21:39:28 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,35 @@
 
 static int	pf_analyze(va_list ap, const char *fmt)
 {
-	int		len;
 	int		ret;
 	t_flags	flag;
+	t_outp	op;
 
 	ret = 0;
-	len = ft_putcstr(fmt, '%');
+	op.str = ft_strcsub(fmt, '%');
+	op.wlen = 0;
 	while ((fmt = ft_strchr(fmt, '%')))
 	{
 		flag = pf_conv_flags(&fmt);// OK
 		pf_conv_width(&fmt, &flag, ap);//OK
 		pf_conv_precision(&fmt, &flag, ap);//OK
 		pf_conv_length(&fmt, &flag);//OK
-		if ((ret = pf_conv_specifier(&fmt, &flag, ap)) == -2)
-			--fmt;
-		else
-			len += ret;
-		len += ft_putcstr(++fmt, '%');
-		len = (ret == -1) ? -1 : len;
+		if ((pf_conv_spec(&fmt, &flag, &op, ap)) == -2)
+			break ;
+		if (op.wlen > 0)
+		{
+			ret += op.wlen;
+			op.str = ft_strdup("");
+		}
+		if (!*(++fmt))
+			break ;
+		op.str = ft_strmer(op.str, ft_strcsub(fmt, '%'));
 	}
-	return (len);
+	if (!op.str)
+		return (ret);
+	ret += write(1, op.str, ft_strlen(op.str));
+	ft_strdel(&(op.str));
+	return (ret);
 }
 
 int			ft_printf(const char *fmt, ...)
