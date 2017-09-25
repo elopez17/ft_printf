@@ -6,13 +6,13 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:03:08 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/20 16:50:17 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/25 13:24:51 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_putwint(wchar_t wc)
+int		ft_putwint(wint_t wc)
 {
 	char str[4];
 
