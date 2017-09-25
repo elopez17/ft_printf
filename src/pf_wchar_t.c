@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:39:32 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/20 21:15:09 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/23 14:37:30 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void				pf_wchar_t(t_flags *flag, t_outp *op, va_list ap)
 
 	op->wlen += write(1, op->str, ft_strlen(op->str));
 	ft_strdel(&(op->str));
+	op->str = ft_strdup("");
 	if (!(s = va_arg(ap, wchar_t*)))
 	{
 		op->wlen += write(1, "(null)", 6);
@@ -66,6 +67,6 @@ void				pf_wchar_t(t_flags *flag, t_outp *op, va_list ap)
 		while (flag->prec_num && *s)
 			flag->prec_num -= ft_putwint(*s++);
 	else
-		while (len)
+		while (len && *s)
 			len -= ft_putwint(*s++);
 }

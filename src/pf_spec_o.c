@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/21 20:09:46 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/23 14:29:30 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static uintmax_t	len_arg(t_flags *flag, va_list ap)
 
 static char			*itoo(uintmax_t dec)
 {
-	char	tmp[20];
+	char	*tmp;
 	char	*s;
 	int		i;
 	int		j;
@@ -39,6 +39,7 @@ static char			*itoo(uintmax_t dec)
 
 	i = -1;
 	j = -1;
+	tmp = ft_strnew(20);
 	while (dec)
 	{
 		remain = dec % 8;
@@ -47,9 +48,8 @@ static char			*itoo(uintmax_t dec)
 	}
 	s = ft_strnew(i + 1);
 	while (i >= 0)
-	{
 		s[++j] = tmp[i--];
-	}
+	ft_strdel(&tmp);
 	return (s);
 }
 
@@ -100,6 +100,7 @@ void				pf_spec_o(t_flags *flag, t_outp *op, va_list ap)
 	int			len;
 	char		*s;
 
+	dec = 0;
 	if ((dec = len_arg(flag, ap)))
 		s = itoo(dec);
 	else

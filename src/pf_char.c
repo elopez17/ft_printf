@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:06:26 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/21 12:26:56 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/22 22:43:40 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static inline void	null_input(t_flags *flag, t_outp *op, char c)
 
 	op->wlen += write(1, op->str, ft_strlen(op->str));
 	ft_strdel(&(op->str));
+	op->str = ft_strdup("");
 	if (flag->width-- > 1)
 	{
 		if (flag->zero)
@@ -27,6 +28,7 @@ static inline void	null_input(t_flags *flag, t_outp *op, char c)
 		op->wlen += write(1, &c, 1);
 		if (flag->left_adj)
 			op->wlen += write(1, (tmp = MAKES(' ', flag->width)), flag->width);
+		ft_strdel(&tmp);
 		return ;
 	}
 	op->wlen += write(1, &c, 1);

@@ -15,7 +15,6 @@ BLU		= \x1b[34m
 PURP	= \x1b[35m
 TURQ	= \x1b[36m
 WHT		= \x1b[37m
-DIR		= ../42FileChecker/srcs/printf/speedtest_ft_printf.c
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror -g
 INC		= includes
@@ -28,15 +27,14 @@ $(NAME):
 	mv src/libftprintf.a ./
 
 program:
-	$(CC) -I $(INC) -c main.c -o main.o
+	$(CC) $(CFLAGS) -I $(INC) -c main.c -o main.o
 	$(CC) $(CFLAGS) -I $(INC) main.o -L ./ -lftprintf -oprog
 	./prog
 
-speed:
-	$(CC) -I $(INC) -c $(DIR) -o speedtest_ft_printf.o
-	$(CC) $(CFLAGS) -I $(INC) speedtest_ft_printf.o -L ./ -lftprintf -ospeed
-	time ./speed
-	rm -f speed
+leaks:
+	$(CC) -I $(INC) -c leaks.c -o main.o
+	$(CC) $(CFLAGS) -I $(INC) main.o -L ./ -lftprintf -oprog
+	./prog
 
 re_pro: re program
 
