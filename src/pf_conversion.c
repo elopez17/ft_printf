@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 00:06:56 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/12 16:44:20 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:40:40 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_flags	pf_conv_flags(const char **fmt)
 	return (flag);
 }
 
-void	pf_conv_width(const char **fmt, t_flags *flag, va_list ap)
+void	pf_conv_width(const char **fmt, t_flags *flag, va_list *ap)
 {
 	while (ft_isdigit(**fmt) || **fmt == '*')
 	{
@@ -50,7 +50,7 @@ void	pf_conv_width(const char **fmt, t_flags *flag, va_list ap)
 		}
 		if (**fmt == '*')
 		{
-			flag->width = va_arg(ap, int);
+			flag->width = va_arg(*ap, int);
 			if (flag->width < 0)
 			{
 				flag->left_adj = 1;
@@ -61,7 +61,7 @@ void	pf_conv_width(const char **fmt, t_flags *flag, va_list ap)
 	}
 }
 
-void	pf_conv_precision(const char **fmt, t_flags *flag, va_list ap)
+void	pf_conv_precision(const char **fmt, t_flags *flag, va_list *ap)
 {
 	if (**fmt == '.')
 	{
@@ -71,7 +71,7 @@ void	pf_conv_precision(const char **fmt, t_flags *flag, va_list ap)
 			(*fmt)++;
 		if (**fmt == '*')
 		{
-			flag->prec_num = va_arg(ap, int);
+			flag->prec_num = va_arg(*ap, int);
 			if (flag->prec_num < 0)
 				flag->prec = 0;
 			(*fmt)++;

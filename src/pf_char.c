@@ -6,13 +6,13 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:06:26 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/22 22:43:40 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 16:11:16 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static inline void	null_input(t_flags *flag, t_outp *op, char c)
+static void	null_input(t_flags *flag, t_outp *op, char c)
 {
 	char *tmp;
 
@@ -34,7 +34,7 @@ static inline void	null_input(t_flags *flag, t_outp *op, char c)
 	op->wlen += write(1, &c, 1);
 }
 
-void		pf_char(t_flags *flag, t_outp *op, va_list ap)
+void		pf_char(t_flags *flag, t_outp *op, va_list *ap)
 {
 	char	c;
 
@@ -43,7 +43,7 @@ void		pf_char(t_flags *flag, t_outp *op, va_list ap)
 		pf_wint_t(flag, op, ap);
 		return ;
 	}
-	if (!(c = va_arg(ap, int)))
+	if (!(c = va_arg(*ap, int)))
 	{
 		null_input(flag, op, c);
 		return ;

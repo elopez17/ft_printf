@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 00:04:22 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/22 22:47:48 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:25:52 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ static void			print_width(wint_t cval, t_flags *flag, t_outp *op, int len)
 	ft_strdel(&tmp);
 }
 
-void				pf_wint_t(t_flags *flag, t_outp *op, va_list ap)
+void				pf_wint_t(t_flags *flag, t_outp *op, va_list *ap)
 {
 	wint_t c;
 
 	op->wlen += write(1, op->str, ft_strlen(op->str));
 	ft_strdel(&(op->str));
 	op->str = ft_strdup("");
-	c = va_arg(ap, wint_t);
+	c = va_arg(*ap, wint_t);
 	if (flag->width > wintlen(c))
 	{
 		print_width(c, flag, op, flag->width - wintlen(c));

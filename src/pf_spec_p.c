@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/21 16:17:29 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:28:55 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ static void	print_width(t_flags *flag, t_outp *op, char **s, int *len)
 	ft_strdel(s);
 }
 
-void		pf_spec_p(t_flags *flag, t_outp *op, va_list ap)
+void		pf_spec_p(t_flags *flag, t_outp *op, va_list *ap)
 {
 	uintmax_t	dec;
 	int			len;
 	char		*s;
 
-	if (!(dec = va_arg(ap, uintmax_t)))
+	if (!(dec = va_arg(*ap, uintmax_t)))
 		s = ft_strdup((flag->prec && !flag->prec_num ? "0x" : "0x0"));
 	else
 		s = ft_strmerge(ft_strdup("0x"), itox(dec));

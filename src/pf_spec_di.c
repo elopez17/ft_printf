@@ -6,27 +6,27 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:33:29 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/21 15:52:04 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:27:03 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static intmax_t	len_arg(t_flags *flag, va_list ap)
+static intmax_t	len_arg(t_flags *flag, va_list *ap)
 {
 	if (flag->l)
-		return (va_arg(ap, long));
+		return (va_arg(*ap, long));
 	if (flag->hh)
-		return ((signed char)va_arg(ap, int));
+		return ((signed char)va_arg(*ap, int));
 	if (flag->h)
-		return ((short)va_arg(ap, int));
+		return ((short)va_arg(*ap, int));
 	if (flag->ll)
-		return (va_arg(ap, long long));
+		return (va_arg(*ap, long long));
 	if (flag->j)
-		return (va_arg(ap, intmax_t));
+		return (va_arg(*ap, intmax_t));
 	if (flag->z)
-		return (va_arg(ap, ssize_t));
-	return (va_arg(ap, int));
+		return (va_arg(*ap, ssize_t));
+	return (va_arg(*ap, int));
 }
 
 static void		print_width(t_flags *flag, t_outp *op, char **s, int *slen)
@@ -69,7 +69,7 @@ static void		print_prec(t_flags *flag, t_outp *op, char **s, int *slen)
 	ft_strdel(s);
 }
 
-void			pf_spec_di(t_flags *flag, t_outp *op, va_list ap)
+void			pf_spec_di(t_flags *flag, t_outp *op, va_list *ap)
 {
 	intmax_t	val;
 	char		*s;

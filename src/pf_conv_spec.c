@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 12:48:16 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/20 12:39:09 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/28 14:20:09 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,25 @@
 
 t_convspec g_convspec[] =
 {
-	{'%', &pf_percent},
-	{'d', &pf_spec_di},
-	{'i', &pf_spec_di},
+	{'%', &pf_percent},//0
 	{'D', &pf_spec_di},
-	{'s', &pf_str},
-	{'c', &pf_char},
-	{'S', &pf_wchar_t},
 	{'C', &pf_wint_t},
-	{'p', &pf_spec_p},
-	{'u', &pf_spec_u},
+	{'F', &pf_spec_f},//3
 	{'U', &pf_spec_u},
-	{'x', &pf_spec_x},
 	{'X', &pf_spec_xup},
+	{'S', &pf_wchar_t},
+	{'O', &pf_spec_o},//7
+	{'d', &pf_spec_di},
+	{'c', &pf_char},
+	{'i', &pf_spec_di},
 	{'o', &pf_spec_o},
-	{'O', &pf_spec_o},
-	{'f', &pf_spec_f},
-	{'F', &pf_spec_f}
+	{'f', &pf_spec_f},//12
+	{'s', &pf_str},
+	{'u', &pf_spec_u},
+	{'x', &pf_spec_x},
+	{'p', &pf_spec_p},
+	{'b', &pf_itobi},
+	{'k', &pf_iso8601}
 };
 
 static int	pf_invalid_spec(t_flags *flag, t_outp *op, char c)
@@ -55,7 +57,7 @@ static int	pf_invalid_spec(t_flags *flag, t_outp *op, char c)
 	return (0);
 }
 
-int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list ap)
+int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list *ap)
 {
 	int i;
 
@@ -63,6 +65,7 @@ int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list ap)
 	op->wlen = 0;
 	flag->l = (**fmt == 'D' || **fmt == 'U' || **fmt == 'O') ? 1 : flag->l;
 	flag->alter = (**fmt == 'p') ? 1 : flag->alter;
+	i = **fmt >= 'a' ? (**fmt >= 'p' ? 12 : 7) : (**fmt >= 'O' ? 3 : -1);
 	while (++i < TOTAL_SPECS)
 	{
 		if (**fmt == g_convspec[i].c)
@@ -71,5 +74,8 @@ int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list ap)
 			return (0);
 		}
 	}
+	if (**fmt == '{' && *(*fmt + 3) == '}')
+		if (pf_color(fmt, op) == 0)
+			return (0);
 	return (pf_invalid_spec(flag, op, **fmt));
 }

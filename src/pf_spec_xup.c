@@ -6,27 +6,27 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/20 18:38:37 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:31:39 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static uintmax_t    len_arg(t_flags *flag, va_list ap)
+static uintmax_t    len_arg(t_flags *flag, va_list *ap)
 {
 	if (flag->l)
-		return (va_arg(ap, unsigned long));
+		return (va_arg(*ap, unsigned long));
 	if (flag->hh)
-		return ((unsigned char)va_arg(ap, unsigned int));
+		return ((unsigned char)va_arg(*ap, unsigned int));
 	if (flag->h)
-		return ((unsigned short)va_arg(ap, unsigned int));
+		return ((unsigned short)va_arg(*ap, unsigned int));
 	if (flag->ll)
-		return (va_arg(ap, unsigned long long));
+		return (va_arg(*ap, unsigned long long));
 	if (flag->j)
-		return (va_arg(ap, uintmax_t));
+		return (va_arg(*ap, uintmax_t));
 	if (flag->z)
-		return (va_arg(ap, size_t));
-	return (va_arg(ap, unsigned int));
+		return (va_arg(*ap, size_t));
+	return (va_arg(*ap, unsigned int));
 }
 
 static char	*itox(uintmax_t dec)
@@ -94,7 +94,7 @@ static void	print_width(t_flags *flag, t_outp *op, char *s, int *ret)
 	op->str = ft_strmer(op->str, s);
 }
 
-void		pf_spec_xup(t_flags *flag, t_outp *op, va_list ap)
+void		pf_spec_xup(t_flags *flag, t_outp *op, va_list *ap)
 {
 	uintmax_t	dec;
 	int			len;

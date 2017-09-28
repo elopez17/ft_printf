@@ -6,13 +6,13 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:33:29 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/20 00:53:50 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:41:22 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	pf_percent(t_flags *flag, t_outp *op, va_list ap)
+void	pf_percent(t_flags *flag, t_outp *op, va_list *ap)
 {
 	int	len;
 

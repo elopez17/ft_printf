@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:12:30 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/21 18:09:07 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:27:48 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	print_width(t_flags *flag, t_outp *op, char **result)
 	op->str = ft_strmer(op->str, *result);
 }
 
-void		pf_spec_f(t_flags *flag, t_outp *op, va_list ap)
+void		pf_spec_f(t_flags *flag, t_outp *op, va_list *ap)
 {
 	double	val;
 	double	dec_part;
@@ -58,7 +58,7 @@ void		pf_spec_f(t_flags *flag, t_outp *op, va_list ap)
 	char	*dec_s;
 	char	*result;
 
-	val = va_arg(ap, double);
+	val = va_arg(*ap, double);
 	int_part = ft_lltoa((long long)val);
 	if (*int_part == '0' && val < 0.0)
 		int_part = ft_strmerge(ft_strdup("-"), int_part);

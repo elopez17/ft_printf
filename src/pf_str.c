@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:33:29 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/23 15:09:46 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/27 03:24:47 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	print_width(t_flags *flag, t_outp *op, char *s, int slen)
 		op->str = ft_strmer(op->str, MAKES(' ', len));
 }
 
-void		pf_str(t_flags *flag, t_outp *op, va_list ap)
+void		pf_str(t_flags *flag, t_outp *op, va_list *ap)
 {
 	char	*s;
 	int		len;
@@ -38,7 +38,7 @@ void		pf_str(t_flags *flag, t_outp *op, va_list ap)
 		pf_wchar_t(flag, op, ap);
 		return ;
 	}
-	if (!(s = va_arg(ap, char*)))
+	if (!(s = va_arg(*ap, char*)))
 		s = ft_strdup("(null)");
 	else
 		s = ft_strdup(s);

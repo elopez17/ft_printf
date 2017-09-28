@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:03:08 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/25 13:24:51 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/25 18:12:01 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		ft_putwint(wint_t wc)
 {
-	char str[4];
+	char str[5];
 
 	if (wc < (MB_CUR_MAX == 1 ? 0xFF : 0x7F))
 		return (write(1, &wc, 1));
