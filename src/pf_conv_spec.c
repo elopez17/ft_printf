@@ -6,33 +6,33 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 12:48:16 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/28 14:20:09 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/28 16:08:01 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 t_convspec g_convspec[] =
-{
-	{'%', &pf_percent},//0
+{//-1
+	{'%', &pf_percent},
+	{'C', &pf_wint_t},//1
 	{'D', &pf_spec_di},
-	{'C', &pf_wint_t},
-	{'F', &pf_spec_f},//3
-	{'U', &pf_spec_u},
-	{'X', &pf_spec_xup},
+	{'F', &pf_spec_f},
+	{'O', &pf_spec_o},//4
 	{'S', &pf_wchar_t},
-	{'O', &pf_spec_o},//7
-	{'d', &pf_spec_di},
-	{'c', &pf_char},
-	{'i', &pf_spec_di},
-	{'o', &pf_spec_o},
-	{'f', &pf_spec_f},//12
-	{'s', &pf_str},
-	{'u', &pf_spec_u},
-	{'x', &pf_spec_x},
-	{'p', &pf_spec_p},
+	{'U', &pf_spec_u},//6
+	{'X', &pf_spec_xup},
 	{'b', &pf_itobi},
-	{'k', &pf_iso8601}
+	{'c', &pf_char},//9
+	{'d', &pf_spec_di},
+	{'f', &pf_spec_f},//11
+	{'i', &pf_spec_di},
+	{'k', &pf_iso8601},
+	{'o', &pf_spec_o},//14
+	{'p', &pf_spec_p},
+	{'s', &pf_str},//16
+	{'u', &pf_spec_u},
+	{'x', &pf_spec_x}
 };
 
 static int	pf_invalid_spec(t_flags *flag, t_outp *op, char c)
@@ -61,11 +61,11 @@ int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list *ap)
 {
 	int i;
 
-	i = -1;
 	op->wlen = 0;
 	flag->l = (**fmt == 'D' || **fmt == 'U' || **fmt == 'O') ? 1 : flag->l;
 	flag->alter = (**fmt == 'p') ? 1 : flag->alter;
-	i = **fmt >= 'a' ? (**fmt >= 'p' ? 12 : 7) : (**fmt >= 'O' ? 3 : -1);
+	i = (**fmt > 'c' ? (**fmt > 'o' ? (**fmt > 's' ? 16 : 14) :\
+(**fmt > 'f' ? 11 : 9)) : (**fmt > 'O' ? (**fmt > 'U' ? 6 : 4) :(**fmt > 'C' ? 1 : -1)));
 	while (++i < TOTAL_SPECS)
 	{
 		if (**fmt == g_convspec[i].c)
