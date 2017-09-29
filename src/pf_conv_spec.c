@@ -6,33 +6,33 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 12:48:16 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/28 16:08:01 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/28 17:06:54 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 t_convspec g_convspec[] =
-{//-1
+{
 	{'%', &pf_percent},
-	{'C', &pf_wint_t},//1
+	{'C', &pf_wint_t},
 	{'D', &pf_spec_di},
 	{'F', &pf_spec_f},
-	{'O', &pf_spec_o},//4
-	{'S', &pf_wchar_t},
-	{'U', &pf_spec_u},//6
+	{'O', &pf_spec_o},
 	{'X', &pf_spec_xup},
+	{'S', &pf_wchar_t},
+	{'U', &pf_spec_u},
+	{'c', &pf_char},
 	{'b', &pf_itobi},
-	{'c', &pf_char},//9
 	{'d', &pf_spec_di},
-	{'f', &pf_spec_f},//11
+	{'o', &pf_spec_o},
+	{'f', &pf_spec_f},
 	{'i', &pf_spec_di},
 	{'k', &pf_iso8601},
-	{'o', &pf_spec_o},//14
-	{'p', &pf_spec_p},
-	{'s', &pf_str},//16
+	{'s', &pf_str},
+	{'x', &pf_spec_x},
 	{'u', &pf_spec_u},
-	{'x', &pf_spec_x}
+	{'p', &pf_spec_p}
 };
 
 static int	pf_invalid_spec(t_flags *flag, t_outp *op, char c)
@@ -64,8 +64,7 @@ int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list *ap)
 	op->wlen = 0;
 	flag->l = (**fmt == 'D' || **fmt == 'U' || **fmt == 'O') ? 1 : flag->l;
 	flag->alter = (**fmt == 'p') ? 1 : flag->alter;
-	i = (**fmt > 'c' ? (**fmt > 'o' ? (**fmt > 's' ? 16 : 14) :\
-(**fmt > 'f' ? 11 : 9)) : (**fmt > 'O' ? (**fmt > 'U' ? 6 : 4) :(**fmt > 'C' ? 1 : -1)));
+	i = **fmt > 'c' ? (**fmt > 'o' ? 14 : 9) : (**fmt > 'O' ? 4 : -1);
 	while (++i < TOTAL_SPECS)
 	{
 		if (**fmt == g_convspec[i].c)
