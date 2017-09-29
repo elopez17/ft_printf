@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/27 03:30:36 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/29 05:42:43 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,6 @@ static char	*add_zeros(t_flags *flag, int *len)
 	return (str);
 }
 
-static void	print_width(t_flags *flag, t_outp *op, char *s, int *ret)
-{
-	flag->width -= *ret;
-	if (flag->left_adj)
-	{
-		op->str = ft_strmer(op->str, s);
-		if (flag->width)
-			op->str = ft_strmer(op->str, MAKES(' ', flag->width));
-		return ;
-	}
-	if (flag->width)
-		op->str = ft_strmer(op->str, MAKES(' ', flag->width));
-	op->str = ft_strmer(op->str, s);
-}
-
 void		pf_spec_x(t_flags *flag, t_outp *op, va_list *ap)
 {
 	uintmax_t	dec;
@@ -107,7 +92,15 @@ void		pf_spec_x(t_flags *flag, t_outp *op, va_list *ap)
 	if ((len = ft_strlen(s)) && *s != '0')
 		s = ft_strmer(add_zeros(flag, &len), s);
 	if (flag->width > len)
-		print_width(flag, op, s, &len);
-	else
-		op->str = ft_strmer(op->str, s);
+	{
+		flag->width -= len;
+		if (flag->left_adj)
+		{
+			s = ft_strmer(s, MAKES(' ', flag->width));
+			op->str = ft_strmer(op->str, s);
+			return ;
+		}
+		s = ft_strmer(MAKES(' ', flag->width), s);
+	}
+	op->str = ft_strmer(op->str, s);
 }

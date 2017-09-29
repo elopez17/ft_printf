@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 00:06:56 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/27 03:40:40 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/29 06:15:17 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ t_flags	pf_conv_flags(const char **fmt)
 	t_flags	flag;
 
 	ft_bzero(&flag, sizeof(flag));
-	while (*++*fmt == ' ' || **fmt == '#' || **fmt == '-' ||\
-			**fmt == '+' || **fmt == '0')
+	if (*(*fmt + 1) > '0' && ++*fmt)
+		return (flag);
+	while (1)
 	{
-		if (**fmt == '#')
+		if (*++*fmt == '#')
 			flag.alter = 1;
 		else if (**fmt == '-')
 			flag.left_adj = 1;
@@ -30,6 +31,8 @@ t_flags	pf_conv_flags(const char **fmt)
 			flag.sign = 1;
 		else if (**fmt == ' ')
 			flag.space = 1;
+		else
+			break ;
 	}
 	if (flag.left_adj & flag.zero)
 		flag.zero = 0;
@@ -46,7 +49,7 @@ void	pf_conv_width(const char **fmt, t_flags *flag, va_list *ap)
 		while (ft_isdigit(**fmt))
 		{
 			flag->width = flag->width * 10 + ((**fmt) - '0');
-			(*fmt)++;
+			++(*fmt);
 		}
 		if (**fmt == '*')
 		{
@@ -56,7 +59,7 @@ void	pf_conv_width(const char **fmt, t_flags *flag, va_list *ap)
 				flag->left_adj = 1;
 				flag->width = -flag->width;
 			}
-			(*fmt)++;
+			++(*fmt);
 		}
 	}
 }
@@ -68,19 +71,19 @@ void	pf_conv_precision(const char **fmt, t_flags *flag, va_list *ap)
 		if (*++*fmt != '-')
 			flag->prec = 1;
 		else
-			(*fmt)++;
+			++(*fmt);
 		if (**fmt == '*')
 		{
 			flag->prec_num = va_arg(*ap, int);
 			if (flag->prec_num < 0)
 				flag->prec = 0;
-			(*fmt)++;
+			++(*fmt);
 		}
 		else
 			while (ft_isdigit(**fmt))
 			{
 				flag->prec_num = flag->prec_num * 10 + ((**fmt) - '0');
-				(*fmt)++;
+				++(*fmt);
 			}
 	}
 }
@@ -101,13 +104,13 @@ void	pf_conv_length(const char **fmt, t_flags *flag)
 		{
 			flag->hh = 1;
 			flag->h = 0;
-			(*fmt)++;
+			++(*fmt);
 		}
 		else if (**fmt == 'l' && flag->l)
 		{
 			flag->ll = 1;
 			flag->l = 0;
-			(*fmt)++;
+			++(*fmt);
 		}
 	}
 }

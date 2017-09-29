@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 00:06:40 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/28 13:09:57 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/09/29 11:33:46 by eLopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,14 @@ typedef struct	s_color
 	char	*str;
 }				t_color;
 
+/*
+**	Entry point. main function
+*/
 int				ft_printf(const char *fmt, ...);
+
+/*
+**	parse conversion info functions
+*/
 t_flags			pf_conv_flags(const char **fmt);
 void			pf_conv_width(const char **fmt, t_flags *flag, va_list *ap);
 void			pf_conv_precision(const char **fmt, t_flags *flag, \
@@ -66,9 +73,10 @@ void			pf_conv_precision(const char **fmt, t_flags *flag, \
 void			pf_conv_length(const char **fmt, t_flags *flag);
 int				pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op,\
 		va_list *ap);
-/*int				pf_invalid_spec(va_list ap);
-int					pf_invalid_flag(va_list ap);
-int					pf_invalid_prec(va_list ap);*/
+
+/*
+**	conversion specifier functions
+*/
 void			pf_percent(t_flags *flag, t_outp *op, va_list *ap);
 void			pf_spec_u(t_flags *flag, t_outp *op, va_list *ap);
 void			pf_spec_di(t_flags *flag, t_outp *op, va_list *ap);
@@ -84,27 +92,5 @@ void			pf_spec_f(t_flags *flag, t_outp *op, va_list *ap);
 int				pf_color(const char **fmt, t_outp *op);
 void			pf_itobi(t_flags *flag, t_outp *op, va_list *ap);
 void			pf_iso8601(t_flags *flag, t_outp *op, va_list *ap);
-/*int				pf_spec_cs(t_flags *flag, va_list ap, char c);
-int				pf_spec_ouxz(t_flags *flag, va_list ap, char c);
-char			*pf_o_conv(t_flags *flag, unsigned long long dec);
-char			*pf_x_conv(t_flags *flag, unsigned long long dec, char c);
-char			*pf_o_uintmax(t_flags *flag, uintmax_t dec);
-char			*pf_x_uintmax(t_flags *flag, uintmax_t dec, char c);
-int				pf_int(t_flags *flag, va_list ap);
-int				pf_long(t_flags *flag, va_list ap);
-int				pf_long_long(t_flags *flag, va_list ap);
-int				pf_ulong_long(t_flags *flag, va_list *ap, char c);
-int				pf_intmax_t(t_flags *flag, va_list *ap);
-int				pf_uintmax_t(t_flags *flag, va_list *ap, char c);
-int				pf_wint_t(t_flags *flag, va_list *ap);
-int				pf_wchar_t(t_flags *flag, va_list *ap);
-int				pf_char(t_flags *flag, va_list *ap);
-int				pf_str(t_flags *flag, va_list *ap);
-int				pf_color(const char **fmt, va_list *ap);
-int				pf_at_fd(va_list *ap);
-int				pf_itobi(t_flags *flag, va_list *ap);
-int				pf_atom(va_list *ap);
-int				pf_float(t_flags *flag, va_list *ap);
-int				pf_iso_8601(va_list *ap);*/
 
 #endif
