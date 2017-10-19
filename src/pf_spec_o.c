@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/27 03:23:46 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/10/19 15:17:52 by elopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,8 @@ void				pf_spec_o(t_flags *flag, t_outp *op, va_list *ap)
 	if ((dec = len_arg(flag, ap)))
 		s = itoo(dec);
 	else
-		s = ft_strdup(((flag->prec && !flag->prec_num) || flag->alter ? "" : "0"));
+		s = ft_strdup(((flag->prec && !flag->prec_num) || flag->alter ?\
+					"" : "0"));
 	if ((len = ft_strlen(s)) || flag->alter)
 		s = ft_strmer(add_zeros(flag, &len), s);
 	if (flag->width > len)

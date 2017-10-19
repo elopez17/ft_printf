@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:33:29 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/27 03:29:53 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/10/19 15:05:57 by elopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static uintmax_t	len_arg(t_flags *flag, va_list *ap)
 	return (va_arg(*ap, unsigned int));
 }
 
-static void		print_width(t_flags *flag, t_outp *op, char **s, int *ret)
+static void			print_width(t_flags *flag, t_outp *op, char **s, int *ret)
 {
 	char	*new_s;
 	int		i;
@@ -55,7 +55,7 @@ static void		print_width(t_flags *flag, t_outp *op, char **s, int *ret)
 	ft_strdel(s);
 }
 
-void			pf_spec_u(t_flags *flag, t_outp *op, va_list *ap)
+void				pf_spec_u(t_flags *flag, t_outp *op, va_list *ap)
 {
 	uintmax_t	val;
 	char		*s;
@@ -63,8 +63,8 @@ void			pf_spec_u(t_flags *flag, t_outp *op, va_list *ap)
 
 	flag->zero = (flag->prec == 1) ? 0 : flag->zero;
 	val = len_arg(flag, ap);
-	s = (!val && !HASLENGTH(flag) && (flag->prec && !flag->prec_num) && !HASFLAG(flag)) ?\
-		ft_strdup("") : ft_uimttoa(val);
+	s = (!val && !HASLENGTH(flag) && (flag->prec && !flag->prec_num) &&\
+			!HASFLAG(flag)) ? ft_strdup("") : ft_uimttoa(val);
 	ret = ft_strlen(s);
 	if (flag->width > ret && (flag->width > flag->prec_num || !flag->prec))
 		print_width(flag, op, &s, &ret);

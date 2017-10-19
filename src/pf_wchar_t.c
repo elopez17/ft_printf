@@ -6,7 +6,7 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:39:32 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/27 03:25:25 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/10/19 15:42:24 by elopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void			print_width(t_flags *flag, wchar_t *s, int slen)
 
 	len = flag->width - slen;
 	if (flag->zero)
-			write(1, (tmp = MAKES('0', len)), len);
+		write(1, (tmp = MAKES('0', len)), len);
 	else if (!flag->left_adj)
 		write(1, (tmp = MAKES(' ', len)), len);
 	while (slen >= wintlen(*s) && *s)
@@ -54,8 +54,7 @@ void				pf_wchar_t(t_flags *flag, t_outp *op, va_list *ap)
 		op->wlen += write(1, "(null)", 6);
 		return ;
 	}
-	len = ft_wcharlen(s);
-	if (flag->prec && flag->prec_num < len)
+	if (flag->prec_num < (len = ft_wcharlen(s)) && flag->prec)
 	{
 		len = flag->prec_num - (flag->prec_num % wintlen(*s));
 		flag->prec_num = len;

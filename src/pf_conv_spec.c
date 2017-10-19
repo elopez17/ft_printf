@@ -6,7 +6,7 @@
 /*   By: eLopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/21 12:48:16 by eLopez            #+#    #+#             */
-/*   Updated: 2017/09/29 11:00:25 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/10/19 15:51:55 by elopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,18 @@ static int	pf_invalid_spec(t_flags *flag, t_outp *op, char c)
 	return (0);
 }
 
-int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op, va_list *ap)
+int			pf_conv_spec(const char **fmt, t_flags *flag, t_outp *op,\
+		va_list *ap)
 {
 	int i;
 
 	op->wlen = 0;
 	flag->l = (**fmt == 'D' || **fmt == 'U' || **fmt == 'O') ? 1 : flag->l;
 	flag->alter = (**fmt == 'p') ? 1 : flag->alter;
-	i = **fmt > 'c' ? (**fmt > 'o' ? 14 : 9) : (**fmt > 'O' ? 4 : -1);
+	if (**fmt > 'c')
+		i = (**fmt > 'o' ? 14 : 9);
+	else
+		i = (**fmt > 'O' ? 4 : -1);
 	while (++i < TOTAL_SPECS)
 	{
 		if (**fmt == g_convspec[i].c)

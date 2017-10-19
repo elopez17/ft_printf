@@ -6,13 +6,13 @@
 /*   By: elopez <elopez@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/01 13:42:05 by elopez            #+#    #+#             */
-/*   Updated: 2017/09/29 05:42:43 by eLopez           ###   ########.fr       */
+/*   Updated: 2017/10/19 15:08:25 by elopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static uintmax_t    len_arg(t_flags *flag, va_list *ap)
+static uintmax_t	len_arg(t_flags *flag, va_list *ap)
 {
 	if (flag->l)
 		return (va_arg(*ap, unsigned long));
@@ -29,7 +29,7 @@ static uintmax_t    len_arg(t_flags *flag, va_list *ap)
 	return (va_arg(*ap, unsigned int));
 }
 
-static char	*itox(uintmax_t dec)
+static char			*itox(uintmax_t dec)
 {
 	char	tmp[16];
 	char	*s;
@@ -53,7 +53,7 @@ static char	*itox(uintmax_t dec)
 	return (s);
 }
 
-static char	*add_zeros(t_flags *flag, int *len)
+static char			*add_zeros(t_flags *flag, int *len)
 {
 	char	*str;
 	int		zeros;
@@ -79,7 +79,7 @@ static char	*add_zeros(t_flags *flag, int *len)
 	return (str);
 }
 
-void		pf_spec_x(t_flags *flag, t_outp *op, va_list *ap)
+void				pf_spec_x(t_flags *flag, t_outp *op, va_list *ap)
 {
 	uintmax_t	dec;
 	int			len;
