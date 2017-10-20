@@ -6,7 +6,7 @@
 /*   By: elopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/24 21:02:41 by elopez            #+#    #+#             */
-/*   Updated: 2017/03/24 21:04:50 by elopez           ###   ########.fr       */
+/*   Updated: 2017/10/19 17:26:48 by elopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ void	ft_putstr_fd(char const *s, int fd)
 	if (!s)
 		return ;
 	while (*(s + ++i))
-		ft_putchar_fd(*(s + i), fd);
+		;
+	write(fd, s, i);
 }

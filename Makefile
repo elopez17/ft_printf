@@ -23,8 +23,7 @@ NAME	= libftprintf.a
 all: $(NAME)
 
 $(NAME):
-	make -C src/ re
-	mv src/libftprintf.a ./
+	make -C src/
 
 program:
 	$(CC) $(CFLAGS) -I $(INC) -c main.c -o main.o

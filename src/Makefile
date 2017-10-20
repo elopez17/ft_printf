@@ -6,7 +6,7 @@
 #    By: elopez <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/18 23:40:47 by elopez            #+#    #+#              #
-#    Updated: 2017/09/29 11:37:55 by eLopez           ###   ########.fr        #
+#    Updated: 2017/10/19 17:34:54 by elopez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NO_COLOR= \x1b[0m
@@ -27,7 +27,7 @@ PURP	= \x1b[35m
 TURQ	= \x1b[36m
 WHT		= \x1b[37m
 
-NAME		= libftprintf.a
+NAME		= ../libftprintf.a
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror -g
 FILES		= $(shell ls | grep -E ".+\.c")
